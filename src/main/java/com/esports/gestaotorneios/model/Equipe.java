@@ -24,6 +24,9 @@ public class Equipe {
     @OneToMany(mappedBy = "equipe", cascade = CascadeType.ALL)
     private List<Jogador> jogadores = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "equipes")
+    private List<Torneio> torneios = new ArrayList<>();
+
     // Construtor padrão exigido pelo JPA
     public Equipe() {
     }
@@ -67,5 +70,13 @@ public class Equipe {
 
     public void setJogadores(List<Jogador> jogadores) {
         this.jogadores = jogadores;
+    }
+
+    public List<Torneio> getTorneios() {
+        return torneios;
+    }
+
+    public void setTorneios(List<Torneio> torneios) {
+        this.torneios = torneios;
     }
 }
