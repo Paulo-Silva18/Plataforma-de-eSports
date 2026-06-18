@@ -2,6 +2,8 @@ package com.esports.gestaotorneios.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "equipes")
@@ -18,6 +20,9 @@ public class Equipe {
     private String tag;
 
     private LocalDate dataFundacao;
+
+    @OneToMany(mappedBy = "equipe", cascade = CascadeType.ALL)
+    private List<Jogador> jogadores = new ArrayList<>();
 
     // Construtor padrão exigido pelo JPA
     public Equipe() {
@@ -54,5 +59,13 @@ public class Equipe {
 
     public void setDataFundacao(LocalDate dataFundacao) {
         this.dataFundacao = dataFundacao;
+    }
+
+    public List<Jogador> getJogadores() {
+        return jogadores;
+    }
+
+    public void setJogadores(List<Jogador> jogadores) {
+        this.jogadores = jogadores;
     }
 }
