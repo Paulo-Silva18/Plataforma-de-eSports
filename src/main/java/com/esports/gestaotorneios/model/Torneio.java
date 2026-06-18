@@ -31,6 +31,9 @@ public class Torneio {
     )
     private List<Equipe> equipes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "torneio", cascade = CascadeType.ALL)
+    private List<Partida> partidas = new ArrayList<>();
+
     public Torneio() {
     }
 
@@ -81,5 +84,13 @@ public class Torneio {
 
     public void setEquipes(List<Equipe> equipes) {
         this.equipes = equipes;
+    }
+
+    public List<Partida> getPartidas() {
+        return partidas;
+    }
+
+    public void setPartidas(List<Partida> partidas) {
+        this.partidas = partidas;
     }
 }
