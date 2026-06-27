@@ -167,6 +167,12 @@
             <p>Veja e gerencie a line-up e os jogadores das equipes.</p>
             <a th:href="@{/jogadores}" class="btn">Acessar Jogadores</a>
         </div>
+
+        <div class="card" sec:authorize="hasRole('ORGANIZADOR')">
+            <h2>👥 Usuários</h2>
+            <p>Gerencie as permissões e contas de acesso ao sistema.</p>
+            <a th:href="@{/usuarios}" class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">Gerenciar Acessos</a>
+        </div>
     </main>
 
 </body>

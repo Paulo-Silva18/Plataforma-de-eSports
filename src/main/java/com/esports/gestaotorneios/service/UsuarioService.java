@@ -6,6 +6,7 @@ import com.esports.gestaotorneios.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 @Service
 public class UsuarioService {
@@ -38,5 +39,19 @@ public class UsuarioService {
 
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Usuario> findAll() {
+        return usuarioRepository.findAll();
+    }
+
+    @Transactional
+    public void alterarRole(Long id, UsuarioRole novaRole) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+        
+        usuario.setRole(novaRole);
+        usuarioRepository.save(usuario);
     }
 }

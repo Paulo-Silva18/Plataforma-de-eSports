@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Permissões</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f8f9fa; }
+        .alert { padding: 10px; margin-bottom: 20px; border-radius: 4px; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .btn { padding: 6px 10px; text-decoration: none; background: #007bff; color: white; border-radius: 4px; border: none; cursor: pointer; }
+        .btn:hover { opacity: 0.9; }
+        select { padding: 5px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Gerenciar Usuários e Permissões</h1>
+    
+    <div th:if="${mensagemSucesso}" class="alert alert-success" th:text="${mensagemSucesso}"></div>
+    
+    <a href="/" class="btn" style="background: #6c757d; margin-bottom: 10px; display: inline-block;">Voltar ao Início</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome de Usuário</th>
+                <th>Papel Atual (Role)</th>
+                <th>Alterar Papel</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario.id}">1</td>
+                <td th:text="${usuario.username}">admin</td>
+                <td th:text="${usuario.role}">ROLE_CAPITAO</td>
+                <td>
+                    <form th:action="@{/usuarios/alterar-role}" method="post" style="margin: 0; display: flex; gap: 10px; align-items: center;">
+                        <input type="hidden" name="usuarioId" th:value="${usuario.id}" />
+                        <select name="novaRole">
+                            <option th:each="role : ${roles}" 
+                                    th:value="${role}" 
+                                    th:text="${role}"
+                                    th:selected="${role == usuario.role}">
+                            </option>
+                        </select>
+                        <button type="submit" class="btn">Atualizar</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(usuarios)}">
+                <td colspan="4" style="text-align: center;">Nenhum usuário cadastrado.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
