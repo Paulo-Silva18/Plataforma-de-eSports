@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Torneios</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f8f9fa; }
+        .alert { padding: 10px; margin-bottom: 20px; border-radius: 4px; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .btn { padding: 8px 12px; text-decoration: none; background: #007bff; color: white; border-radius: 4px; display: inline-block; }
+        .btn-danger { background: #dc3545; }
+        .btn:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <h1>Torneios Disponíveis</h1>
+    
+    <div th:if="${mensagemSucesso}" class="alert alert-success" th:text="${mensagemSucesso}"></div>
+    
+    <!-- Apenas ORGANIZADOR vê o botão de criar novo torneio -->
+    <a sec:authorize="hasRole('ORGANIZADOR')" th:href="@{/torneios/novo}" class="btn">Criar Novo Torneio</a>
+    <a href="/" class="btn" style="background: #6c757d;">Voltar ao Início</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Premiação (R$)</th>
+                <th>Início</th>
+                <th>Fim</th>
+                <!-- Apenas ORGANIZADOR vê a coluna de ações -->
+                <th sec:authorize="hasRole('ORGANIZADOR')">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="torneio : ${torneios}">
+                <td th:text="${torneio.id}">1</td>
+                <td th:text="${torneio.nome}">CBLOL</td>
+                <td th:text="${torneio.premiacao}">100000.0</td>
+                <td th:text="${#temporals.format(torneio.dataInicio, 'dd/MM/yyyy')}">01/01/2023</td>
+                <td th:text="${#temporals.format(torneio.dataFim, 'dd/MM/yyyy')}">31/12/2023</td>
+                
+                <!-- Apenas ORGANIZADOR vê os botões de editar/excluir -->
+                <td sec:authorize="hasRole('ORGANIZADOR')">
+                    <a th:href="@{/torneios/{id}/editar(id=${torneio.id})}" class="btn">Editar</a>
+                    <a th:href="@{/torneios/{id}/excluir(id=${torneio.id})}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este torneio?');">Excluir</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(torneios)}">
+                <td colspan="6" style="text-align: center;">Nenhum torneio cadastrado.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
