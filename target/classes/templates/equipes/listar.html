@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Equipes</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f8f9fa; }
+        .alert { padding: 10px; margin-bottom: 20px; border-radius: 4px; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .btn { padding: 8px 12px; text-decoration: none; background: #007bff; color: white; border-radius: 4px; display: inline-block; }
+        .btn-danger { background: #dc3545; }
+        .btn:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <h1>Equipes Cadastradas</h1>
+    
+    <div th:if="${mensagemSucesso}" class="alert alert-success" th:text="${mensagemSucesso}"></div>
+    
+    <a th:href="@{/equipes/nova}" class="btn">Cadastrar Nova Equipe</a>
+    <a href="/" class="btn" style="background: #6c757d;">Voltar ao Início</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>TAG</th>
+                <th>Data de Fundação</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="equipe : ${equipes}">
+                <td th:text="${equipe.id}">1</td>
+                <td th:text="${equipe.nome}">Equipe A</td>
+                <td th:text="${equipe.tag}">EQPA</td>
+                <td th:text="${#temporals.format(equipe.dataFundacao, 'dd/MM/yyyy')}">01/01/2020</td>
+                <td>
+                    <a th:href="@{/equipes/{id}/editar(id=${equipe.id})}" class="btn">Editar</a>
+                    <a th:href="@{/equipes/{id}/excluir(id=${equipe.id})}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir esta equipe?');">Excluir</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(equipes)}">
+                <td colspan="5" style="text-align: center;">Nenhuma equipe cadastrada.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
