@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Plataforma de eSports</title>
-    <!-- Fonte moderna e design focado na estética visual (Premium Design) -->
+    <title>Registro - Plataforma de eSports</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -114,7 +113,7 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(99, 102, 241, 0.4);
         }
-
+        
         .btn-register {
             display: block;
             width: 100%;
@@ -150,42 +149,30 @@
             color: #f87171;
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
-
-        .alert-success {
-            background-color: rgba(34, 197, 94, 0.15);
-            color: #4ade80;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="login-header">
-            <h1>Plataforma eSports</h1>
-            <p>Faça login para acessar o painel</p>
+            <h1>Nova Conta</h1>
+            <p>Junte-se à Plataforma eSports</p>
         </div>
 
-        <div th:if="${param.error}" class="alert alert-error">
-            Usuário ou senha inválidos.
-        </div>
-        
-        <div th:if="${param.logout}" class="alert alert-success">
-            Você saiu do sistema com sucesso.
-        </div>
+        <div th:if="${mensagemErro}" class="alert alert-error" th:text="${mensagemErro}"></div>
 
-        <form th:action="@{/login}" method="post">
+        <form th:action="@{/salvar-usuario}" th:object="${usuario}" method="post">
             <div class="form-group">
                 <label for="username">Nome de Usuário</label>
-                <input type="text" id="username" name="username" class="form-control" required autofocus placeholder="Digite seu usuário">
+                <input type="text" id="username" th:field="*{username}" class="form-control" required autofocus placeholder="Escolha um usuário">
             </div>
             
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input type="password" id="password" name="password" class="form-control" required placeholder="Digite sua senha">
+                <input type="password" id="password" th:field="*{password}" class="form-control" required placeholder="Crie sua senha">
             </div>
             
-            <button type="submit" class="btn-submit">Entrar na Arena</button>
-            <a th:href="@{/registro}" class="btn-register">Criar nova conta</a>
+            <button type="submit" class="btn-submit">Cadastrar</button>
+            <a th:href="@{/login}" class="btn-register">Voltar ao Login</a>
         </form>
     </div>
 </body>

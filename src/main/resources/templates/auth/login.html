@@ -107,11 +107,33 @@
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 1rem;
         }
 
         .btn-submit:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-register {
+            display: block;
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid rgba(99, 102, 241, 0.5);
+            border-radius: 8px;
+            background: transparent;
+            color: #818cf8;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+
+        .btn-register:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #a5b4fc;
         }
 
         .alert {
@@ -163,6 +185,7 @@
             </div>
             
             <button type="submit" class="btn-submit">Entrar na Arena</button>
+            <a th:href="@{/registro}" class="btn-register">Criar nova conta</a>
         </form>
     </div>
 </body>
