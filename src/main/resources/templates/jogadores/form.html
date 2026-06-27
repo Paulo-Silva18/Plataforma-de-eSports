@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Jogador</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; color: #333; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .btn { padding: 10px 15px; background: #28a745; color: white; border: none; cursor: pointer; border-radius: 4px; font-size: 16px; }
+        .btn:hover { background: #218838; }
+        .alert { padding: 10px; margin-bottom: 20px; border-radius: 4px; }
+        .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1 th:text="${jogador.id == null ? 'Novo Jogador' : 'Editar Jogador'}">Novo Jogador</h1>
+
+    <div th:if="${mensagemErro}" class="alert alert-error" th:text="${mensagemErro}"></div>
+
+    <form th:action="@{/jogadores/salvar}" th:object="${jogador}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group">
+            <label for="nome">Nome Real:</label>
+            <input type="text" id="nome" th:field="*{nome}" required placeholder="Nome Completo do Jogador" />
+        </div>
+
+        <div class="form-group">
+            <label for="nickname">Nickname (Único):</label>
+            <input type="text" id="nickname" th:field="*{nickname}" required placeholder="Nickname no Jogo" />
+        </div>
+
+        <div class="form-group">
+            <label for="posicao">Posição:</label>
+            <select id="posicao" th:field="*{posicao}" required>
+                <option value="">Selecione uma Posição</option>
+                <option value="Top">Top</option>
+                <option value="Jungle">Jungle</option>
+                <option value="Mid">Mid</option>
+                <option value="ADC">ADC</option>
+                <option value="Support">Support</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="equipe">Equipe:</label>
+            <select id="equipe" th:field="*{equipe.id}" required>
+                <option value="">Selecione a Equipe</option>
+                <!-- Popula dinamicamente as opções através do Model passado pela Controller -->
+                <option th:each="equipe : ${equipes}" th:value="${equipe.id}" th:text="${equipe.nome} + ' [' + ${equipe.tag} + ']'"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Salvar</button>
+        <a th:href="@{/jogadores}" style="margin-left: 10px; text-decoration: none; color: #007bff;">Cancelar</a>
+    </form>
+</body>
+</html>

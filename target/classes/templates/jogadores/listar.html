@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Jogadores</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f8f9fa; }
+        .alert { padding: 10px; margin-bottom: 20px; border-radius: 4px; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .btn { padding: 8px 12px; text-decoration: none; background: #007bff; color: white; border-radius: 4px; display: inline-block; }
+        .btn-danger { background: #dc3545; }
+        .btn:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <h1>Jogadores Cadastrados</h1>
+    
+    <div th:if="${mensagemSucesso}" class="alert alert-success" th:text="${mensagemSucesso}"></div>
+    
+    <a th:href="@{/jogadores/novo}" class="btn">Cadastrar Novo Jogador</a>
+    <a href="/" class="btn" style="background: #6c757d;">Voltar ao Início</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome Real</th>
+                <th>Nickname</th>
+                <th>Posição</th>
+                <th>Equipe</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="jogador : ${jogadores}">
+                <td th:text="${jogador.id}">1</td>
+                <td th:text="${jogador.nome}">Faker</td>
+                <td th:text="${jogador.nickname}">T1 Faker</td>
+                <td th:text="${jogador.posicao}">Mid</td>
+                <td th:text="${jogador.equipe != null ? jogador.equipe.nome : 'Sem Equipe'}">T1</td>
+                <td>
+                    <a th:href="@{/jogadores/{id}/editar(id=${jogador.id})}" class="btn">Editar</a>
+                    <a th:href="@{/jogadores/{id}/excluir(id=${jogador.id})}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este jogador?');">Excluir</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(jogadores)}">
+                <td colspan="6" style="text-align: center;">Nenhum jogador cadastrado.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
