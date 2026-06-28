@@ -2,6 +2,7 @@ package com.esports.gestaotorneios.controller;
 
 import com.esports.gestaotorneios.model.Torneio;
 import com.esports.gestaotorneios.service.TorneioService;
+import com.esports.gestaotorneios.service.EquipeService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +14,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class TorneioController {
 
     private final TorneioService torneioService;
+    private final EquipeService equipeService;
 
-    public TorneioController(TorneioService torneioService) {
+    public TorneioController(TorneioService torneioService, EquipeService equipeService) {
         this.torneioService = torneioService;
+        this.equipeService = equipeService;
     }
 
     @GetMapping
@@ -58,5 +61,40 @@ public class TorneioController {
         torneioService.deleteById(id);
         attributes.addFlashAttribute("mensagemSucesso", "Torneio excluído com sucesso!");
         return "redirect:/torneios";
+    }
+
+    // --- GERENCIAMENTO DE EQUIPES NO TORNEIO ---
+
+    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @GetMapping("/{id}/equipes")
+    public String gerenciarEquipes(@PathVariable Long id, Model model) {
+        Torneio torneio = torneioService.findById(id);
+        model.addAttribute("torneio", torneio);
+        model.addAttribute("equipesDisponiveis", equipeService.findAll());
+        return "torneios/gerenciar-equipes";
+    }
+
+    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PostMapping("/{id}/equipes/adicionar")
+    public String adicionarEquipe(@PathVariable Long id, @RequestParam Long equipeId, RedirectAttributes attributes) {
+        try {
+            torneioService.adicionarEquipe(id, equipeId);
+            attributes.addFlashAttribute("mensagemSucesso", "Equipe adicionada com sucesso!");
+        } catch (IllegalArgumentException e) {
+            attributes.addFlashAttribute("mensagemErro", e.getMessage());
+        }
+        return "redirect:/torneios/" + id + "/equipes";
+    }
+
+    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PostMapping("/{torneioId}/equipes/{equipeId}/remover")
+    public String removerEquipe(@PathVariable Long torneioId, @PathVariable Long equipeId, RedirectAttributes attributes) {
+        try {
+            torneioService.removerEquipe(torneioId, equipeId);
+            attributes.addFlashAttribute("mensagemSucesso", "Equipe removida com sucesso!");
+        } catch (IllegalArgumentException e) {
+            attributes.addFlashAttribute("mensagemErro", e.getMessage());
+        }
+        return "redirect:/torneios/" + torneioId + "/equipes";
     }
 }

@@ -47,6 +47,7 @@
                 
                 <!-- Apenas ORGANIZADOR vê os botões de editar/excluir -->
                 <td sec:authorize="hasRole('ORGANIZADOR')">
+                    <a th:href="@{/torneios/{id}/equipes(id=${torneio.id})}" class="btn" style="background: #28a745;">Gerenciar Equipes</a>
                     <a th:href="@{/torneios/{id}/editar(id=${torneio.id})}" class="btn">Editar</a>
                     <a th:href="@{/torneios/{id}/excluir(id=${torneio.id})}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este torneio?');">Excluir</a>
                 </td>

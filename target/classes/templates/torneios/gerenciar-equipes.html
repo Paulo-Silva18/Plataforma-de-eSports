@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Equipes do Torneio</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: auto; }
+        h1, h3 { color: #222; }
+        .alert { padding: 10px; margin-bottom: 20px; border-radius: 4px; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f8f9fa; }
+        .btn { padding: 8px 12px; text-decoration: none; background: #007bff; color: white; border-radius: 4px; display: inline-block; border: none; cursor: pointer; }
+        .btn-danger { background: #dc3545; }
+        .btn:hover { opacity: 0.9; }
+        .add-form { margin-top: 30px; padding: 20px; border: 1px solid #ddd; background: #fdfdfd; }
+        select { padding: 8px; font-size: 16px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Equipes do Torneio: <span th:text="${torneio.nome}">Nome</span></h1>
+
+        <div th:if="${mensagemSucesso}" class="alert alert-success" th:text="${mensagemSucesso}"></div>
+        <div th:if="${mensagemErro}" class="alert alert-danger" th:text="${mensagemErro}"></div>
+
+        <a th:href="@{/torneios}" class="btn" style="background: #6c757d; margin-bottom: 20px;">Voltar aos Torneios</a>
+
+        <h3>Equipes Participantes</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tag</th>
+                    <th>Nome da Equipe</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="equipe : ${torneio.equipes}">
+                    <td th:text="${equipe.tag}">TAG</td>
+                    <td th:text="${equipe.nome}">Nome da Equipe</td>
+                    <td>
+                        <form th:action="@{/torneios/{torneioId}/equipes/{equipeId}/remover(torneioId=${torneio.id}, equipeId=${equipe.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja remover esta equipe do torneio?');">Remover</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(torneio.equipes)}">
+                    <td colspan="3" style="text-align: center;">Nenhuma equipe cadastrada neste torneio.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="add-form">
+            <h3>Adicionar Nova Equipe</h3>
+            <form th:action="@{/torneios/{id}/equipes/adicionar(id=${torneio.id})}" method="post">
+                <label for="equipeId">Selecione uma Equipe:</label>
+                <select name="equipeId" id="equipeId" required>
+                    <option value="" disabled selected>--- Escolha ---</option>
+                    <option th:each="eq : ${equipesDisponiveis}" 
+                            th:value="${eq.id}" 
+                            th:text="${'[' + eq.tag + '] ' + eq.nome}"></option>
+                </select>
+                <button type="submit" class="btn" style="background: #28a745;">Adicionar ao Torneio</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
