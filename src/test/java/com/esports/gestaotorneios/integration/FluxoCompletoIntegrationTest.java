@@ -49,7 +49,10 @@ public class FluxoCompletoIntegrationTest {
 
         // Verificar o estado real do Banco de Dados usando o Repository
         assertFalse(equipeRepository.findAll().isEmpty(), "A equipe não foi salva no banco de dados.");
-        Equipe equipeSalva = equipeRepository.findAll().get(0);
+        Equipe equipeSalva = equipeRepository.findAll().stream()
+                .filter(e -> "PaiN Gaming".equals(e.getNome()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Equipe 'PaiN Gaming' não encontrada"));
         assertEquals("PaiN Gaming", equipeSalva.getNome());
         assertEquals("PNG", equipeSalva.getTag());
 
@@ -65,7 +68,10 @@ public class FluxoCompletoIntegrationTest {
 
         // Verificar o estado real do Banco de Dados para Jogador
         assertFalse(jogadorRepository.findAll().isEmpty(), "O jogador não foi salvo no banco de dados.");
-        Jogador jogadorSalvo = jogadorRepository.findAll().get(0);
+        Jogador jogadorSalvo = jogadorRepository.findAll().stream()
+                .filter(j -> "brTT".equals(j.getNickname()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Jogador 'brTT' não encontrado"));
         assertEquals("brTT", jogadorSalvo.getNickname());
         
         // Comprovar o relacionamento das tabelas (Integração concluída com sucesso!)
